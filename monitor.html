@@ -1,0 +1,39 @@
+<h2>访问监控（实时）</h2>
+
+<table border="1" cellspacing="0" cellpadding="4">
+    <thead>
+        <tr>
+            <th>时间</th>
+            <th>IP</th>
+            <th>设备</th>
+            <th>URL</th>
+            <th>Referrer</th>
+        </tr>
+    </thead>
+    <tbody id="logTable"></tbody>
+</table>
+
+<script>
+async function loadLogs() {
+    const res = await fetch("/api/logs");
+    const data = await res.json();
+
+    const tbody = document.getElementById("logTable");
+    tbody.innerHTML = "";
+
+    data.reverse().forEach(item => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+            <td>${item.time}</td>
+            <td>${item.ip}</td>
+            <td>${item.device}</td>
+            <td>${item.url}</td>
+            <td>${item.referrer}</td>
+        `;
+        tbody.appendChild(tr);
+    });
+}
+
+loadLogs();
+setInterval(loadLogs, 3000);
+</script>
